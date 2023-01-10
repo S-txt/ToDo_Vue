@@ -15,13 +15,8 @@ const { user } = storeToRefs(authStore);
     <div v-if="user">
         <h1>{{user.firstName}}'s to-do list</h1>
       <div class="todo">
-          <aside>
-            <Form/>
-          </aside>
-
-          <section>
-            <List/>
-          </section>
+          <Form />
+          <List />
       </div>
     </div>
 </template>
@@ -32,7 +27,7 @@ section {
 }
 .todo{
   display: flex;
-  flex-flow: row;
+  flex-direction: column;
 
 }
 section > div {

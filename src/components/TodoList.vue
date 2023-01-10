@@ -1,56 +1,33 @@
 <template>
-  <div>
-    <div v-for="todo of storeTodo.todos" :key="todo.id" class="wrapper">
-      <div class="header">
-        <div class="title">{{ todo.title }}</div>
-        <div>
-          <button type="button" @click="storeTodo.removeTodo(todo.id)">remove</button>
-        </div>
+  <div class="todoListWrapper">
+    <div v-for="todo of storeTodo.todos" :key="todo.id" class="card m-3 p-3 flex-row justify-content-between flex-gap-2">
+      <div>
+        <h5>{{ todo.title }}</h5>
+        <div v-if="todo?.description">{{ todo?.description }}</div>
       </div>
-      <div v-if="todo?.description">{{ todo?.description }}</div>
+      <button type="text" class="btn btn-danger" @click="storeTodo.removeTodo(todo.id)">Remove</button>
     </div>
   </div>
 </template>
 
-<script>
-import { defineComponent } from "vue";
+<script setup>
 import { useTodoStore } from "../stores/todo";
 
-export default defineComponent({
-  name: "TodoList",
-  setup() {
-    const storeTodo = useTodoStore();
-
-    return { storeTodo };
-  },
-});
+const storeTodo = useTodoStore();
 </script>
 
-<style>
-.wrapper {
-  padding: 24px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid;
-  margin-top: 16px;
+<style scoped>
+.todoListWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  flex-wrap: wrap;
 }
-.header {
-  display: flex;
-  justify-content: space-between;
+.todoListWrapper > div {
+  overflow: scroll;
 }
 
-.title {
-  font-weight: 600;
-  font-size: 18px;
-}
-
-button {
-  padding: 8px;
-  border-radius: 8px;
-  color: #f8f9fa;
-  background-color: #DC3545;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 16px;
+.todoListWrapper button {
+  margin-left: 16px;
 }
 </style>

@@ -1,58 +1,45 @@
 <template>
-  <form @submit="onSubmit">
-
-    <!-- title -->
-    <div class="field">
-      <label class="label">Title</label>
-      <input type="text" class="input" name="title" v-model="title" />
-    </div>
-
-    <!-- description -->
-    <div class="field">
-      <label class="label">Description</label>
-      <textarea class="input" name="description" v-model="description"></textarea>
-    </div>
-
-    <!-- submit -->
-    <div class="field">
-      <button type="submit">Create Todo</button>
-    </div>
-  </form>
+  <div class="card m-3">
+    <Form @submit="onSubmit" :validation-schema="schema">
+      <div class="field">
+        <label class="label">Title</label>
+        <Field type="text" class="input form-control" name="title" />
+      </div>
+      <div class="field">
+        <label class="label">Description</label>
+        <Field class="input form-control" name="description" />
+      </div>
+      <div class="field">
+        <button type="submit" class="btn btn-primary">Create Todo</button>
+      </div>
+    </Form>
+  </div>
+  
 </template>
 
-<script>
+<script setup>
+import * as Yup from 'yup';
+import { Field, Form } from "vee-validate";
 import { defineComponent } from "vue";
 import { useTodoStore } from "../stores/todo";
+import { useAlertStore } from "@/stores";
 
-export default defineComponent({
-  name: "TodoForm",
-  data() {
-    return {
-      title: "",
-      description: "",
-    };
-  },
-  setup() {
+const schema = Yup.object().shape({
+  title: Yup.string().required("Title is required"),
+  description: Yup.string(),
+})
+
+function onSubmit(values, actions) {
+    console.log()
     const storeTodo = useTodoStore();
-    return { storeTodo };
-  },
-  methods: {
-    onSubmit(Event) {
-      Event.preventDefault();
-
-      if (!this.title) {
-        return;
-      }
-
-      // save data into store
-      this.storeTodo.addTodo(this.title, this.description);
-
-      // clear data
-      this.title = "";
-      this.description = "";
-    },
-  },
-});
+    const alertStore = useAlertStore();
+    try {
+      storeTodo.addTodo(values.title, values.description);
+      actions.setValues({title: "", description: ""});
+    } catch (e) {
+      alertStore.error(e);
+    }
+}
 </script>
 
 <style scoped>
@@ -69,13 +56,13 @@ export default defineComponent({
   font-weight: 600;
   color: #212529;
 }
-
+/* 
 form {
   padding: 24px;
   background-color: #f8f9fa;
   border-radius: 8px;
   border: 1px solid;
-}
+} */
 
 button {
   padding: 8px;
