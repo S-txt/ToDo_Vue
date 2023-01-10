@@ -1,6 +1,6 @@
 <template>
-  <div class="todoListWrapper">
-    <div v-for="todo of storeTodo.todos" :key="todo.id" class="card m-3 p-3 flex-row justify-content-between flex-gap-2">
+  <div class="todoListWrapper m-3">
+    <div v-for="todo of storeTodo.todos" :key="todo.id" class="card p-3 flex-row justify-content-between flex-gap-2">
       <div>
         <h5>{{ todo.title }}</h5>
         <div v-if="todo?.description">{{ todo?.description }}</div>
